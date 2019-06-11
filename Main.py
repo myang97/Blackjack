@@ -18,9 +18,8 @@ class Shoe:
     total_deck = []
 
     def __init__(self, num_decks):
-        for i in range(num_decks):
-            self.total_deck += self.deck
-        shuffle(self.total_deck)
+        self.num_decks = num_decks
+        self.total_deck = self.new_shoe()
 
     def draw_card(self):
         return self.total_deck.pop()
@@ -28,12 +27,24 @@ class Shoe:
     def size(self):
         return len(self.total_deck)
 
+    def needs_shuffle(self):
+        return self.size() <= self.num_decks * 52 * .18
+
+    def new_shoe(self):
+        for i in range(self.num_decks):
+            self.total_deck += self.deck
+        shuffle(self.total_deck)
+        return self.total_deck
+
+
 
 def main():
-    shoe = Shoe(6)
-    for i in range(52 * 6):
-        print(shoe.draw_card())
-        print(shoe.size())
+    s = Shoe(6)
+    for i in range(2000):
+        if s.needs_shuffle():
+            s.new_shoe()
+        print("card is : " + str(s.draw_card()))
+        print("size is " + str(s.size()))
 
 
 if __name__ == "__main__":
